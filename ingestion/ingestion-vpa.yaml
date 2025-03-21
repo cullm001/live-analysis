@@ -1,0 +1,21 @@
+apiVersion: autoscaling.k8s.io/v1
+kind: VerticalPodAutoscaler
+metadata:
+  name: ingestion-vpa
+  namespace: ingestion
+spec:
+  targetRef:
+    apiVersion: "apps/v1"
+    kind: Deployment
+    name: ingestion-layer
+  updatePolicy:
+    updateMode: "Auto"  
+  resourcePolicy:
+    containerPolicies:
+    - containerName: "ingestion"
+      minAllowed:
+        cpu: "100m"  
+        memory: "128Mi" 
+      maxAllowed:
+        cpu: "2000m"  
+        memory: "2048Mi"  

@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: analysis-layer-a-i
+  namespace: analysis-a-i
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: analysis-a-i
+  template:
+    metadata:
+      labels:
+        app: analysis-a-i
+    spec:
+      containers:
+      - name: analysis
+        image: cullm001/analysis-layer:latest
+        ports:
+        - containerPort: 5001
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: analysis-service-a-i
+spec:
+  type: LoadBalancer
+  selector:
+    app: analysis-a-i
+  ports:
+    - protocol: TCP
+      port: 5001
+      targetPort: 5001
