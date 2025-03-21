@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ingestion-layer
+  namespace: ingestion
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: ingestion
+  template:
+    metadata:
+      labels:
+        app: ingestion
+    spec:
+      containers:
+        - name: ingestion
+          image: cullm001/ingestion-layer:latest
+          resources:
+            requests:
+              cpu: "100m"
+            limits:
+              cpu: "300m"
+          ports:
+            - containerPort: 5000
+          volumeMounts:
+            - name: geoip-db
+              mountPath: /app/ingestion/GeoLite2-Country.mmdb
+      volumes:
+        - name: geoip-db
+          hostPath:
+            path: /users/cullm001/ingestion/GeoLite2-Country.mmdb
+            type: File
+

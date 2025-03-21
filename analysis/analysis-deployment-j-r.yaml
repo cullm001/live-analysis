@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: analysis-layer-j-r
+  namespace: analysis-j-r
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: analysis-j-r
+  template:
+    metadata:
+      labels:
+        app: analysis-j-r
+    spec:
+      containers:
+      - name: analysis
+        image: cullm001/analysis-layer:latest
+        ports:
+        - containerPort: 5001
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: analysis-service-j-r
+spec:
+  type: LoadBalancer
+  selector:
+    app: analysis-j-r
+  ports:
+    - protocol: TCP
+      port: 5001
+      targetPort: 5001
